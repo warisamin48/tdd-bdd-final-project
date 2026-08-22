@@ -195,7 +195,16 @@ describe('READ Product', () => {
       expect(response.body.error).toBe('Not Found');
 
     });
-
+    test('should return 400 when update data is invalid', async () => {
+        const products = await createProducts(1);
+        const testProduct = products[0];
+        const badData = { name: '' };
+        const response = await request(app)
+          .put(`${BASE_URL}/${testProduct.id}`)
+          .send(badData)
+          .expect(400);
+        expect(response.body.error).toBe('Validation Error');
+      });
   });
 
   describe('DELETE Product', () => {
