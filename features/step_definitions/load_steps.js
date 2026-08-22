@@ -17,6 +17,16 @@ Given('the following products', async function (dataTable) {
     // Ignore if no products or API error, as the goal is to clear if possible
     console.warn('Could not clear existing products, proceeding with creation:', error.message);
   }
-
-  
+// Load new products from the data table
+ const rows = dataTable.hashes();
+ for (const row of rows) {
+   const productData = {
+     name: row.name,
+     description: row.description,
+     price: parseFloat(row.price),
+     available: row.available.toLowerCase() === 'true',
+     category: row.category
+   };
+   await axios.post(API_URL, productData);
+ }
 });

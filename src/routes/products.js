@@ -161,7 +161,8 @@ router.get('/:id', async (req, res) => {
   
     try {
   
-      const { name, category, available } = req.query;
+      const { name, category, available, availability } = req.query;
+    const availableParam = available !== undefined ? available : availability;
   
       const where = {};
   
@@ -169,7 +170,7 @@ router.get('/:id', async (req, res) => {
   
       if (category) where.category = category;
   
-      if (available !== undefined) where.available = (available === 'true');
+      if (availableParam !== undefined) where.available = (availableParam === 'true');
   
       const products = await Product.findAll({ where });
   

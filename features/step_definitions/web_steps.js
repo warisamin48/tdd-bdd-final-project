@@ -107,6 +107,64 @@ When('I change {string} to {string}', async function (fieldName, newValue) {
   await field.clear();
   await field.sendKeys(newValue);
 });
+When('I press the {string} button', async function (buttonText) {
+
+  const button = await getButton(buttonText);
+
+  await button.click();
+
+});
+
+Then('I should see the message {string}', async function (expectedMessage) {
+
+  const flashMessage = await driver.findElement(By.id('flash_message'));
+
+  await driver.wait(async () => {
+
+    const text = await flashMessage.getText();
+
+    return text.length > 0;
+
+  }, 10000);
+
+  const actualMessage = await flashMessage.getText();
+
+  assert.strictEqual(actualMessage, expectedMessage, `Expected message "${expectedMessage}", but got "${actualMessage}"`);
+
+});
+
+When('I change the {string} to {string}', async function (fieldName, newValue) {
+
+  const field = await getField(fieldName);
+
+  await field.clear();
+
+  await field.sendKeys(newValue);
+
+});
+
+Then('I should see {string} in the results', async function (expectedText) {
+
+  const searchResults = await driver.findElement(By.id('search_results'));
+
+  await driver.wait(until.elementTextContains(searchResults, expectedText), 10000);
+
+  const resultsText = await searchResults.getText();
+
+  assert.strictEqual(resultsText.includes(expectedText), true, `Expected to see "${expectedText}" in results`);
+
+});
+
+Then('I should not see {string} in the results', async function (unexpectedText) {
+
+  const searchResults = await driver.findElement(By.id('search_results'));
+
+  const resultsText = await searchResults.getText();
+
+  assert.strictEqual(resultsText.includes(unexpectedText), false, `Expected not to see "${unexpectedText}" in results`);
+
+});
+ 
 
 
 
