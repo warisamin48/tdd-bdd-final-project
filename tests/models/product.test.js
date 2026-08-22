@@ -162,7 +162,19 @@ describe('Product Model', () => {
      });
    });
  });
+ describe('Find a Product by Price', () => {
+    test('should find a product by price and ensure it passes', async () => {
+      const productData = ProductFactory.build();
+      await Product.create(productData);
+      const foundProducts = await Product.findByPrice(productData.price);
+      expect(foundProducts.length).toBeGreaterThan(0);
+      foundProducts.forEach(p => {
+        expect(parseFloat(p.price)).toBe(productData.price);
+      });
+    });
+  });
+ 
+
+  });
  
   
-  
-});

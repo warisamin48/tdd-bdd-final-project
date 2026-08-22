@@ -306,7 +306,34 @@ describe('READ Product', () => {
     });
 
   });
- 
+  describe('Error Handling', () => {
+    test('should return 400 for invalid id on read', async () => {
+      const response = await request(app)
+        .get(`${BASE_URL}/not-a-valid-id`)
+        .expect(400);
+      expect(response.body.error).toBe('Bad Request');
+    });
+    test('should return 400 for invalid id on update', async () => {
+      const productData = ProductFactory.build();
+      const response = await request(app)
+        .put(`${BASE_URL}/not-a-valid-id`)
+        .send(productData)
+        .expect(400);
+      expect(response.body.error).toBe('Bad Request');
+    });
+    test('should return 400 for invalid id on delete', async () => {
+      const response = await request(app)
+        .delete(`${BASE_URL}/not-a-valid-id`)
+        .expect(400);
+      expect(response.body.error).toBe('Bad Request');
+    });
+    test('should return 400 for invalid category on list', async () => {
+      const response = await request(app)
+        .get(`${BASE_URL}?category=NOT_A_REAL_CATEGORY`)
+        .expect(400);
+      expect(response.body.error).toBe('Bad Request');
+    });
+  });
   
   
 });
